@@ -47,4 +47,33 @@ function buildTable(data) {
   // Added each value from the object into a cell
 }
 
+function handleClick() {
+  let date = d3.select("#datetime").property("value");
+  // d3 is similar to html that is why it looks different
+  // .select() will pick the very first element that matches selector string
+    // ex. "#datetime"
+  // .property() is grabbing the information that we are selecting and storing
+    // it as our variable date
+  
+  let filteredData = tableData;
+  // tableData is our raw data from data.js
+  // did I need to define this before or is this already a specific defined
+    // w/in JavaScript????
+  
+  if (date) {
+    filteredData - filteredData.filter(row => row.datetime === date);
+  };
+
+
+  // Rebuild the table using the filtered data
+  // @NOTE: If no date was entered, then filteredData will
+  // just be the original tableData.
+  buildTable(filteredData);
+};
+
+d3.selectAll("#filter-btn").on("click", handleClick);
+
+// builds table when the page loads
+buildTable(tableData);
+
 
