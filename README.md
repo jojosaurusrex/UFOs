@@ -21,12 +21,12 @@ In more general terms, this week I learned:
 ## Challenge Results
 The results of the challenge can be seen in Figure 1. This is what will be seen when we open this index.html within your browser. You can use each and every filter to specify the search of UFO data. 
 
-[Insert Figure 1 here]
+![Figure1UFO](https://user-images.githubusercontent.com/98374315/167509647-85ef55b2-0a81-4530-911a-ab07a1761fb1.PNG)
 Figure 1. 
 
 In Figure 2, we can see how two of the filters can narrow down our results quite a bit. 
 
-[Insert Figure 2 here]
+![caDateFilterUFO](https://user-images.githubusercontent.com/98374315/167509665-cdc03fe1-7040-4c8f-b59c-354c4b497794.PNG)
 Figure 2. 
 
 ## Challenge Summary
