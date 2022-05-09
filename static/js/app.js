@@ -1,60 +1,79 @@
-// import the data from data.js
-const tableData = data;
+// from data.js
+var tableData = data;
 
-// Reference the HTML table using d3
+// get table references
 var tbody = d3.select("tbody");
 
-
 function buildTable(data) {
-  tbody.html(""); // clears data
+  // First, clear out any existing data
+  tbody.html("");
 
-
-  data.forEach((dataRow) => { 
+  // Next, loop through each object in the data
+  // and append a row and cells for each value in the row
+  data.forEach((dataRow) => {
+    // Append a row to the table body
     let row = tbody.append("tr");
-  
-    Object.values(dataRow).forEach((val) => { 
-      // dataRow -> values go into dataRow
-      // the forEach((val) specifies we want one object per row
+
+    // Loop through each field in the dataRow and add
+    // each value as a table cell (td)
+    Object.values(dataRow).forEach((val) => {
       let cell = row.append("td");
-      // ^set up the action of appending data into table data tag <td>
-      cell.text(val); 
-      // actual addition of values into the data tag
+      cell.text(val);
     });
-  
-   }); 
-   // ^ With this function, we have done the following:
-  // Looped through each object in the array
-  // Appended a row to the HTML table
-  // Added each value from the object into a cell
+  });
 }
 
-function handleClick() {
-  let date = d3.select("#datetime").property("value");
-  // d3 is similar to html that is why it looks different
-  // .select() will pick the very first element that matches selector string
-    // ex. "#datetime"
-  // .property() is grabbing the information that we are selecting and storing
-    // it as our variable date
+// 1. Create a variable to keep track of all the filters as an object.
+var filters = {};
+
+// 3. Use this function to update the filters. 
+function updateFilters() {
+
+    // 4a. Save the element that was changed as a variable.
+    let changedElement = d3.select(this);
+
+    // 4b. Save the value that was changed as a variable.
+    let filterValue = changedElement.property("value");
+
+    // 4c. Save the id of the filter that was changed as a variable.
+    let filterID = changedElement.attr("id");
   
-  let filteredData = tableData;
-  // tableData is our raw data from data.js
-  // did I need to define this before or is this already a specific defined
-    // w/in JavaScript????
+    // 5. If a filter value was entered then add that filterId and value
+    // to the filters list. Otherwise, clear that filter from the filters object.
+    if (filterValue) {
+      filters[filterID] = filterValue;
+    }
+    else {
+      delete filters(filterID);
+    }
   
-  if (date) {
-    filteredData = filteredData.filter(row => row.datetime === date);
-  };
+    // 6. Call function to apply all filters and rebuild the table
+    filterTable();
+  
+  }
+  
+  // 7. Use this function to filter the table when data is entered.
+  function filterTable() {
+  
+    // 8. Set the filtered data to the tableData.
+    let filteredData = tableData;
+  
+    // 9. Loop through all of the filters and keep any data that
+      // matches the filter values
+    //Object.entries() returns an array whose elements are arrays 
+      //corresponding to the enumerable string-keyed property [key, value]
+      // link: https://developer.mozilla.org/en-US/docs/web/javascript/reference/global_objects/object/entries
+    Object.entries(filters).forEach(([key, value]) => {
+      filteredData = filteredData.filter(row => row[key] === value);
+    });
 
-
-  // Rebuild the table using the filtered data
-  // @NOTE: If no date was entered, then filteredData will
-  // just be the original tableData.
-  buildTable(filteredData);
-};
-
-d3.selectAll("#filter-btn").on("click", handleClick);
-
-// builds table when the page loads
-buildTable(tableData);
-
-
+  
+    // 10. Finally, rebuild the table using the filtered data
+    buildTable(filteredData);
+  }
+  
+  // 2. Attach an event to listen for changes to each filter
+  d3.selectAll("input").on("change", updateFilters);
+  
+  // Build the table when the page loads
+  buildTable(tableData);
